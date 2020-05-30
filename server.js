@@ -6,6 +6,10 @@
 
 const express = require("express");
 const path = require("path");
+const dotenv = require('dotenv');
+const os = require('os');
+
+dotenv.config();
 
 
 /**
@@ -14,6 +18,7 @@ const path = require("path");
 
 const app = express();
 const port = "8080";
+
 
 /**
  *  App Configuration
@@ -25,7 +30,9 @@ const port = "8080";
  */
 
 app.get("/", (req, res) => {
-    res.status(200).send("Hey Time is -- " + Date());
+    let content = 'Hello From SG ! - ' + process.env.USER + ' ' + os.hostname();
+    content+="<br/><br/> Hey Time is -- " + Date();
+    res.status(200).send(content);
   });
 
 /**

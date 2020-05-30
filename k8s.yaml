@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sgtimecheckapp-config
+data:
+  username: Nairobi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sgtimecheckapp-deployment
+  labels:
+    app: sgtimecheckapp-deployment
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: sgtimecheckapp
+  template:
+    metadata:
+      labels:
+        app: sgtimecheckapp
+    spec:
+      containers:
+      - name: sgtimecheckapp
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        image: xxxxx.azurecr.io/socnodeapp:14
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        env:
+          - name: USER
+            valueFrom:
+              configMapKeyRef:
+                 name: sgtimecheckapp-config
+                 key: username
+          - name: WeatherService
+            value: mintcoreapp-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sgtimecheckapp-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: sgtimecheckapp
+  ports:
+    - nodePort: 31000
+      port: 31000
+      targetPort: 8080
