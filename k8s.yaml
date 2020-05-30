@@ -29,7 +29,7 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "100m"
-        image: xxxxx.azurecr.io/socnodeapp:14
+        image: rpsgaz204.azurecr.io/rejunpazureimage:3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
